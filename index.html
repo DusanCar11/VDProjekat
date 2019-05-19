@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<head>
+<title>ImeSajta/Pocetna</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="StyleSheet.css">
+<script src="FunkcijeJS.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body onLoad="loadRestaurants()" style="background-color:#fcf5c2;">
+	<div class="jumbotron" style="background-image: url(images/newJumbotronImg.jpg); background-size: cover;">
+		<div class="row">
+			<div class="col-1 offset-10 text-right"><a href="#"><img src="images/serbianFlag.png" class="img-fluid" style="width:auto; max-height:40px;"></a></div>
+			<div class="col-1"><a href="#"><img src="images/britainFlag.png" class="img-fluid" style="width:auto; max-height:40px;"></a></div>
+		</div>
+		<br>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="index.html">ImeSajta</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="#">Pocetna</a>
+				</li>
+			    <li class="nav-item active">
+					<div class="dropdown">
+						<button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Restorani
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" href="#">Cukarica</a>
+							<a class="dropdown-item" href="#">Palilula</a>
+							<a class="dropdown-item" href="#">Savski venac</a>
+							<a class="dropdown-item" href="#">Zvezdara</a>
+							<a class="dropdown-item" href="#">Svi restorani</a>
+						</div>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Dostava</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Moje narudzbine</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">O nama</a>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+			  <input class="form-control mr-sm-2" type="search" placeholder="Pretraga" aria-label="Search">
+			  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pretraga</button>
+			</form>
+		  </div>
+		</nav>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 text-center">
+				<img class="img-fluid" style="max-height:210px; width:100%;" src="images/indexPageImg4.jpg">
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-10 col-lg-6 text-center font-weight-bold" style="font-size:22px;">
+				<p>Interaktivniji, brzi i bolji sajt za narucivanje hrane od svih ostalih trenutno. Ogromna ponuda hrane
+					i mnostvo specijaliteta i po pristupacnim cenama iz najboljih restorana u gradu</p>
+				<p>I ono po cemu se razlikujemo od drugih,</p>
+				<p>Nema naplate dostave!</p>
+				<p>Narucujte i uzivajte!</p>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 text-center">
+				<img class="img-fluid" style="max-height:210px; width:100%;" src="images/indexPageImg3.jpg">
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-12 col-md-4 text-center">
+				<div class="border border-dark font-weight-bold" style="height:270px;">
+					<a href="#"><img onClick="openRestaurantPage(1)" class="img-fluid" style="max-height:200px; width:100%;" id="picture1"></a>
+					<a href="#"><label id="name1" onClick="openRestaurantPage(1)"></label></a>
+					<br>
+					<img src="images/starImg.png" style="max-height:30px; max-width:30px;">&nbsp;<label id="grade1"></label>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4 text-center">
+				<div class="border border-dark font-weight-bold" style="height:270px;">
+					<a href="#"><img onClick="openRestaurantPage(2)" class="img-fluid" style="max-height:200px; width:100%;" id="picture2"></a>
+					<a href="#"><label id="name2" onClick="openRestaurantPage(2)"></label></a>
+					<br>
+					<img src="images/starImg.png"  style="max-height:30px; max-width:30px;">&nbsp;<label id="grade2"></label>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4 text-center">
+				<div class="border border-dark font-weight-bold" style="height:270px;">
+					<a href="#"><img onClick="openRestaurantPage(3)" class="img-fluid" style="max-height:200px; width:100%;" id="picture3"></a>
+					<a href="#"><label id="name3" onClick="openRestaurantPage(3)"></label></a>
+					<br>
+					<img src="images/starImg.png"  style="max-height:30px; max-width:30px;">&nbsp;<label id="grade3"></label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="jumbotron bg-warning">
+		<p>Copyright 2019, Dusan Nikolic i Milos Jacimovic</p>
+		<p>Odsek za Softversko inzenjerstvo</p>
+		<p>Elektrotehnicki fakultet Univerziteta u Beogradu</p>
+	</div>
+</body>
+</html>
