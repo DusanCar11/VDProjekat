@@ -381,3 +381,129 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 						  'Error: Your browser doesn\'t support geolocation.');
 	infoWindow.open(map);
 }
+
+function rememberPageIndex(index) {
+	if (check()) {
+		localStorage.setItem("from", index);
+	}
+}
+
+function nameSort(side) {
+	localStorage.setItem("sortSide",side);
+	localStorage.removeItem("sortSideGrade");
+	document.getElementById("third").checked=false;
+	document.getElementById("fourth").checked=false;
+	fillRestaurantPage();
+}
+
+function gradeSort(side) {
+	localStorage.setItem("sortSideGrade",side);
+	localStorage.removeItem("sortSide");
+	document.getElementById("first").checked=false;
+	document.getElementById("second").checked=false;
+	fillRestaurantPage();
+}
+
+function fillRestaurantPage() {
+	if (!check()) {
+		return;
+	}
+	else if (localStorage.getItem("from")==-1) {
+		from=0;
+	}
+	else {
+		from=localStorage.getItem("from");
+		from-=1;
+	}
+	var nameSort=0;
+	if (localStorage.getItem("sortSide")!=null) {
+		nameSort=localStorage.getItem("sortSide");
+	}
+	var gradeSort=0;
+	if (localStorage.getItem("sortSideGrade")!=null) {
+		gradeSort=localStorage.getItem("sortSideGrade");
+	}
+	var chosenArray = new Array();
+	var community = localStorage.getItem("community");
+	var k=0;
+	for (i=0; i<16; i++) {
+		var restaurant = JSON.parse(localStorage.getItem("restaurant"+i));
+		if (restaurant.locationArea == community) {
+			chosenArray[k++]=restaurant;
+		}
+		else if (community=="Sve") {
+			chosenArray[k++]=restaurant;
+		}
+	}
+	if (nameSort==1) {
+		chosenArray.sort(nameSortCompUp);
+		document.getElementById("first").checked =true;
+	}
+	else if (nameSort==2) {
+		chosenArray.sort(nameSortCompUp);
+		chosenArray.reverse();
+		document.getElementById("second").checked =true;
+	}
+	if (gradeSort==1) {
+		chosenArray.sort(gradeSortComp);
+		document.getElementById("third").checked=true;
+	}
+	else if (gradeSort==2) {
+		chosenArray.sort(gradeSortComp);
+		chosenArray.reverse();
+		document.getElementById("fourth").checked=true;
+	}
+	var place=0;
+	for (i=from*4; i<from*4+4; i++) {
+		document.getElementById("picR"+place).src ="images/" + chosenArray[i].name + "/profile.jpg";
+		document.getElementById("nameR"+place).innerHTML = chosenArray[i].name;
+		document.getElementById("gradeR"+place).innerHTML = chosenArray[i].grade;
+		document.getElementById("descriptionR"+place).innerHTML = chosenArray[i].description;
+		place++;
+	}
+	var string="";
+	if (chosenArray.length>4) {
+		for (i=0; i<chosenArray.length/4; i++) {
+			var kk=i+1;
+			string+="<a href=\"restorani.html\" onClick=\"rememberPageIndex("+kk+")\">" + kk + "</a>&nbsp;";
+		}
+		document.getElementById("pages").innerHTML = string;
+	}
+}
+
+function whichRestaurantPage(index) {
+	
+	var community;
+	switch (index) {
+		case 1: community="Cukarica"; break;
+		case 2: community="Palilula"; break;
+		case 3: community="Savski Venac"; break;
+		case 4: community="Zvezdara"; break;
+		case 5: community="Sve"; break;
+	}
+	if (check) {
+		localStorage.setItem("community", community);
+		localStorage.setItem("from",-1);
+	}
+}
+
+function nameSortCompUp(a,b) {
+	var until;
+	if (a.name.length > b.name.length) {
+		until=b.name.length;
+	}
+	else {
+		until=a.name.length;
+	}
+	for (i=0; i<until; i++) {
+		if (a.name.charAt(i) < b.name.charAt(i)) {return -1;}
+		if (a.name.charAt(i) > b.name.charAt(i)) {return 1;}
+	}
+	return 0;
+}
+
+function gradeSortComp(a,b) {
+	if (a.grade > b.grade) {return 1;}
+	if (a.grade < b.grade) {return -1;}
+	return 0;
+}
