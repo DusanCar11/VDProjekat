@@ -61,7 +61,7 @@ function loadRestaurants() {
 	restaurant3.street = "Pozeska";
 	restaurant3.num_of_grades = 1911;
 	restaurant3.grade = 4.6;
-	restaurant3.type_of_food = "Burgeri"
+	restaurant3.type_of_food = "Burger"
 	restaurant3.description = "Burgeri, Americka hrana. Riznica najrazlicitijih slanih ukusa i ponuda u kojoj ce svako lako pronaci svoju omiljenu kombinaciju!";
 	restaurant3.meal1 = "Burger collina XL";
 	restaurant3.meal2 = "Double cheeseburger XL";
@@ -213,7 +213,7 @@ function loadRestaurants() {
 	restaurant11.street = "Admirala Geprata";
 	restaurant11.num_of_grades = 462;
 	restaurant11.grade = 4.3;
-	restaurant11.type_of_food = "Meksicka hrana"
+	restaurant11.type_of_food = "Pasta"
 	restaurant11.description = "Italijanska hrana, paste, posna i vegetarijanska hrana, ribe i plodovi mora, internacionalna hrana!";
 	restaurant11.meal1 = "Karbonara";
 	restaurant11.meal2 = "Biftek pasta";
@@ -270,7 +270,7 @@ function loadRestaurants() {
 	restaurant14.street = "Surcinski put";
 	restaurant14.num_of_grades = 774;
 	restaurant14.grade = 4.3;
-	restaurant14.type_of_food = "Salate"
+	restaurant14.type_of_food = "Salata"
 	restaurant14.description = "Dorucak, posna i vegetarijanska hrana, fit hrana, veganska hrana. Lagana, zdrava i ukusno pripremljena hrana od svezeg voca i povrca!";
 	restaurant14.meal1 = "Pure protein senior salata";
 	restaurant14.meal2 = "Spring salata";
@@ -396,12 +396,28 @@ function nameSort(side) {
 	fillRestaurantPage();
 }
 
+function nameSortOrder(side) {
+	localStorage.setItem("sortSide",side);
+	localStorage.removeItem("sortSideGrade");
+	document.getElementById("third").checked=false;
+	document.getElementById("fourth").checked=false;
+	window.localtion.reload();
+}
+
 function gradeSort(side) {
 	localStorage.setItem("sortSideGrade",side);
 	localStorage.removeItem("sortSide");
 	document.getElementById("first").checked=false;
 	document.getElementById("second").checked=false;
 	fillRestaurantPage();
+}
+
+function gradeSortOrder(side) {
+	localStorage.setItem("sortSideGrade",side);
+	localStorage.removeItem("sortSide");
+	document.getElementById("first").checked=false;
+	document.getElementById("second").checked=false;
+	window.location.reload();
 }
 
 function fillRestaurantPage() {
@@ -484,6 +500,8 @@ function whichRestaurantPage(index) {
 	if (check) {
 		localStorage.setItem("community", community);
 		localStorage.setItem("from",-1);
+		localStorage.removeItem("sortSideGrade");
+		localStorage.removeItem("sortSide");
 	}
 }
 
@@ -507,3 +525,200 @@ function gradeSortComp(a,b) {
 	if (a.grade < b.grade) {return -1;}
 	return 0;
 }
+
+function foodFilter(which) {
+	if (!check()) {
+		return;
+	}
+	switch(which) {
+		case 1: if (document.getElementById("Rostilj").checked == true) {
+			localStorage.setItem("Rostilj", "Rostilj");
+			}
+			else {
+				localStorage.removeItem("Rostilj");
+			}
+			break;
+		case 2: if (document.getElementById("Pasta").checked == true) {
+			localStorage.setItem("Pasta", "Pasta");
+			}
+			else {
+				localStorage.removeItem("Pasta");
+			}
+			break;
+		case 3: if (document.getElementById("Burger").checked == true) {
+			localStorage.setItem("Burger", "Burger");
+			}
+			else {
+				localStorage.removeItem("Burger");
+			}
+			break;
+		case 4: if (document.getElementById("Giros").checked == true) {
+			localStorage.setItem("Giros", "Giros");
+			}
+			else {
+				localStorage.removeItem("Giros");
+			}
+			break;
+		case 5: if (document.getElementById("Pica").checked == true) {
+			localStorage.setItem("Pica", "Pica");
+			}
+			else {
+				localStorage.removeItem("Pica");
+			}
+			break;
+		case 6: if (document.getElementById("Meksicka hrana").checked == true) {
+			localStorage.setItem("Meksicka hrana", "Meksicka hrana");
+			}
+			else {
+				localStorage.removeItem("Meksicka hrana");
+			}
+			break;
+		case 7: if (document.getElementById("Palacinke").checked == true) {
+			localStorage.setItem("Palacinke", "Palacinke");
+			}
+			else {
+				localStorage.removeItem("Palacinke");
+			}
+			break;
+		case 8: if (document.getElementById("Salata").checked == true) {
+			localStorage.setItem("Salata", "Salata");
+			}
+			else {
+				localStorage.removeItem("Salata");
+			}
+			break;
+		case 9: if (document.getElementById("Dorucak").checked == true) {
+			localStorage.setItem("Dorucak", "Dorucak");
+			}
+			else {
+				localStorage.removeItem("Dorucak");
+			}
+			break;
+	}
+	window.location.reload();
+}
+
+function fillOrderPage() {
+	if (!check()) {
+		return;
+	}
+	else if (localStorage.getItem("from")==-1) {
+		from=0;
+	}
+	else {
+		from=localStorage.getItem("from");
+		from-=1;
+	}
+	var nameSort=0;
+	if (localStorage.getItem("sortSide")!=null) {
+		nameSort=localStorage.getItem("sortSide");
+	}
+	var gradeSort=0;
+	if (localStorage.getItem("sortSideGrade")!=null) {
+		gradeSort=localStorage.getItem("sortSideGrade");
+	}
+	var foodType = new Array();
+	var foodTypeCnt=0;
+	if (localStorage.getItem("Rostilj") == "Rostilj") {
+		foodType[foodTypeCnt++]="Rostilj";
+	}
+	if (localStorage.getItem("Pasta") == "Pasta") {
+		foodType[foodTypeCnt++]="Pasta";
+	}
+	if (localStorage.getItem("Burger") == "Burger") {
+		foodType[foodTypeCnt++]="Burger";
+	}
+	if (localStorage.getItem("Giros") == "Giros") {
+		foodType[foodTypeCnt++]="Giros";
+	}
+	if (localStorage.getItem("Pica") == "Pica") {
+		foodType[foodTypeCnt++]="Pica";
+	}
+	if (localStorage.getItem("Meksicka hrana") == "Meksicka hrana") {
+		foodType[foodTypeCnt++]="Meksicka hrana";
+	}
+	if (localStorage.getItem("Palacinke") == "Palacinke") {
+		foodType[foodTypeCnt++]="Palacinke";
+	}
+	if (localStorage.getItem("Salata") == "Salata") {
+		foodType[foodTypeCnt++]="Salata";
+	}
+	if (localStorage.getItem("Dorucak") == "Dorucak") {
+		foodType[foodTypeCnt++]="Dorucak";
+	}
+	var chosenArray = new Array();
+	var community = localStorage.getItem("community");
+	var k=0;
+	for (i=0; i<16; i++) {
+		var restaurant = JSON.parse(localStorage.getItem("restaurant"+i));
+		if (foodType.length==0) {
+			chosenArray[k++]=restaurant;
+		}
+		else {
+			for (iter=0; iter<foodType.length; iter++) {
+				if (restaurant.type_of_food == foodType[iter]) {
+					chosenArray[k++]=restaurant;
+				}
+			}
+		}
+	}
+	if (nameSort==1) {
+		chosenArray.sort(nameSortCompUp);
+		document.getElementById("first").checked =true;
+	}
+	else if (nameSort==2) {
+		chosenArray.sort(nameSortCompUp);
+		chosenArray.reverse();
+		document.getElementById("second").checked =true;
+	}
+	if (gradeSort==1) {
+		chosenArray.sort(gradeSortComp);
+		document.getElementById("third").checked=true;
+	}
+	else if (gradeSort==2) {
+		chosenArray.sort(gradeSortComp);
+		chosenArray.reverse();
+		document.getElementById("fourth").checked=true;
+	}
+	for (i=0; i<foodType.length; i++) {
+		document.getElementById(foodType[i]).checked=true;
+	}
+	var place=0;
+	var fillStringAll="";
+	for (i=from*4; i<from*4+4; i++) {
+		if (i>=chosenArray.length) {
+			break;
+		}
+		var rest = chosenArray[i];
+		var fillString = "<div class=\"row border border-warning\">\
+			<div class=\"col-xs-12 col-md-3\">\
+			<a href=\"#\"><img class=\"py-2\" onClick=\"openOrderingPage("+rest.name+")\" src=\"images/"+rest.name+"/profile.jpg\" style=\"width:100%; height:100%;\"></a>\
+			</div>\
+			<div class=\"col-xs-12 col-md-9 py-2\"><a href=\"#\" onClick=\"openOrderingPage("+rest.name+")\">\
+				<label>"+rest.name+"</label></a>\
+				<br>\
+				<img src=\"images/starImg.png\" style=\"width:30px; height:30px;\">&nbsp; <label>"+rest.grade+"</label>\
+				<br>\
+				<label>"+rest.description+"</label>\
+			</div>\
+		</div>\
+		<br>";
+		fillStringAll+=fillString;
+	}
+	document.getElementById("toBeFilled").innerHTML = fillStringAll;
+	var string="";
+	if (chosenArray.length>4) {
+		for (i=0; i<chosenArray.length/4; i++) {
+			var kk=i+1;
+			string+="<a href=\"dostava.html\" onClick=\"rememberPageIndex("+kk+")\">" + kk + "</a>&nbsp;";
+		}
+		document.getElementById("pages").innerHTML = string;
+	}
+}
+
+function fillOrderPageTO() {
+	setTimeout(fillOrderPage,100);
+}
+
+
+
