@@ -399,9 +399,10 @@ function nameSort(side) {
 function nameSortOrder(side) {
 	localStorage.setItem("sortSide",side);
 	localStorage.removeItem("sortSideGrade");
+	localStorage.setItem("from", -1);
 	document.getElementById("third").checked=false;
 	document.getElementById("fourth").checked=false;
-	window.localtion.reload();
+	window.location.reload();
 }
 
 function gradeSort(side) {
@@ -414,6 +415,7 @@ function gradeSort(side) {
 
 function gradeSortOrder(side) {
 	localStorage.setItem("sortSideGrade",side);
+	localStorage.setItem("from", -1);
 	localStorage.removeItem("sortSide");
 	document.getElementById("first").checked=false;
 	document.getElementById("second").checked=false;
@@ -692,12 +694,12 @@ function fillOrderPage() {
 		var rest = chosenArray[i];
 		var fillString = "<div class=\"row border border-warning\">\
 			<div class=\"col-xs-12 col-md-3\">\
-			<a href=\"#\"><img class=\"py-2\" onClick=\"openOrderingPage("+rest.name+")\" src=\"images/"+rest.name+"/profile.jpg\" style=\"width:100%; height:100%;\"></a>\
+			<a href=\"naruciti.html\"><img class=\"py-2\" onClick=\"openOrderingPage("+rest.name+")\" src=\"images/"+rest.name+"/profile.jpg\" style=\"width:100%; height:100%;\"></a>\
 			</div>\
-			<div class=\"col-xs-12 col-md-9 py-2\"><a href=\"#\" onClick=\"openOrderingPage("+rest.name+")\">\
-				<label>"+rest.name+"</label></a>\
+			<div class=\"col-xs-12 col-md-9 py-2\"><a href=\"naruciti.html\" onClick=\"openOrderingPage("+rest.name+")\">\
+				<label><b>"+rest.name+"</b></label></a>\
 				<br>\
-				<img src=\"images/starImg.png\" style=\"width:30px; height:30px;\">&nbsp; <label>"+rest.grade+"</label>\
+				<img src=\"images/starImg.png\" style=\"width:30px; height:30px;\">&nbsp; <label><b>"+rest.grade+"</b></label>\
 				<br>\
 				<label>"+rest.description+"</label>\
 			</div>\
@@ -720,5 +722,10 @@ function fillOrderPageTO() {
 	setTimeout(fillOrderPage,100);
 }
 
-
+function whichOrderPage() {
+	if (check) {
+		localStorage.setItem("from", -1);
+	}
+	
+}
 
