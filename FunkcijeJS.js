@@ -600,6 +600,100 @@ function foodFilter(which) {
 	window.location.reload();
 }
 
+function openOrderingPage(whichR) {
+	localStorage.setItem("orderingRestaurant", whichR);
+}
+
+function loadOrderingContent() {
+	if (!check()) {
+		return;
+	}
+	else if (localStorage.getItem("from")==-1) {
+		from=0;
+	}
+	else {
+		from=localStorage.getItem("from");
+		from-=1;
+	}
+	var nameSort=0;
+	if (localStorage.getItem("sortSide")!=null) {
+		nameSort=localStorage.getItem("sortSide");
+	}
+	var gradeSort=0;
+	if (localStorage.getItem("sortSideGrade")!=null) {
+		gradeSort=localStorage.getItem("sortSideGrade");
+	}
+	var foodType = new Array();
+	var foodTypeCnt=0;
+	if (localStorage.getItem("Rostilj") == "Rostilj") {
+		foodType[foodTypeCnt++]="Rostilj";
+	}
+	if (localStorage.getItem("Pasta") == "Pasta") {
+		foodType[foodTypeCnt++]="Pasta";
+	}
+	if (localStorage.getItem("Burger") == "Burger") {
+		foodType[foodTypeCnt++]="Burger";
+	}
+	if (localStorage.getItem("Giros") == "Giros") {
+		foodType[foodTypeCnt++]="Giros";
+	}
+	if (localStorage.getItem("Pica") == "Pica") {
+		foodType[foodTypeCnt++]="Pica";
+	}
+	if (localStorage.getItem("Meksicka hrana") == "Meksicka hrana") {
+		foodType[foodTypeCnt++]="Meksicka hrana";
+	}
+	if (localStorage.getItem("Palacinke") == "Palacinke") {
+		foodType[foodTypeCnt++]="Palacinke";
+	}
+	if (localStorage.getItem("Salata") == "Salata") {
+		foodType[foodTypeCnt++]="Salata";
+	}
+	if (localStorage.getItem("Dorucak") == "Dorucak") {
+		foodType[foodTypeCnt++]="Dorucak";
+	}
+	var chosenArray = new Array();
+	var community = localStorage.getItem("community");
+	var k=0;
+	for (i=0; i<16; i++) {
+		var restaurant = JSON.parse(localStorage.getItem("restaurant"+i));
+		if (foodType.length==0) {
+			chosenArray[k++]=restaurant;
+		}
+		else {
+			for (iter=0; iter<foodType.length; iter++) {
+				if (restaurant.type_of_food == foodType[iter]) {
+					chosenArray[k++]=restaurant;
+				}
+			}
+		}
+	}
+	if (nameSort==1) {
+		chosenArray.sort(nameSortCompUp);
+	}
+	else if (nameSort==2) {
+		chosenArray.sort(nameSortCompUp);
+		chosenArray.reverse();
+	}
+	if (gradeSort==1) {
+		chosenArray.sort(gradeSortComp);
+	}
+	else if (gradeSort==2) {
+		chosenArray.sort(gradeSortComp);
+		chosenArray.reverse();
+	}
+	var id = parseInt(localStorage.getItem("orderingRestaurant"),10);
+	var restaurant = chosenArray[id];
+	document.getElementById("profilePic").src = "images/" + restaurant.name + "/profile.jpg"
+	document.getElementById("name").innerHTML = restaurant.name;
+	document.getElementById("description").innerHTML = restaurant.description;
+	for (i=1; i<6; i++) {
+		document.getElementById("Pic"+i).src = "images/" + restaurant.name + "/meal" + i +".jpg";
+		document.getElementById("Name"+i).innerHTML = restaurant["meal"+i];
+		document.getElementById("Price"+i).innerHTML = restaurant["meal"+i+"_price"] + "RSD";
+	}
+}
+
 function fillOrderPage() {
 	if (!check()) {
 		return;
@@ -694,9 +788,9 @@ function fillOrderPage() {
 		var rest = chosenArray[i];
 		var fillString = "<div class=\"row border border-warning\">\
 			<div class=\"col-xs-12 col-md-3\">\
-			<a href=\"naruciti.html\"><img class=\"py-2\" onClick=\"openOrderingPage("+rest.name+")\" src=\"images/"+rest.name+"/profile.jpg\" style=\"width:100%; height:100%;\"></a>\
+			<a href=\"naruciti.html\"><img class=\"py-2\" onClick=\"openOrderingPage("+i+")\" src=\"images/"+rest.name+"/profile.jpg\" style=\"width:100%; height:100%;\"></a>\
 			</div>\
-			<div class=\"col-xs-12 col-md-9 py-2\"><a href=\"naruciti.html\" onClick=\"openOrderingPage("+rest.name+")\">\
+			<div class=\"col-xs-12 col-md-9 py-2\"><a href=\"naruciti.html\" onClick=\"openOrderingPage("+i+")\">\
 				<label><b>"+rest.name+"</b></label></a>\
 				<br>\
 				<img src=\"images/starImg.png\" style=\"width:30px; height:30px;\">&nbsp; <label><b>"+rest.grade+"</b></label>\
@@ -718,14 +812,130 @@ function fillOrderPage() {
 	}
 }
 
-function fillOrderPageTO() {
-	setTimeout(fillOrderPage,100);
-}
-
 function whichOrderPage() {
-	if (check) {
+	if (check()) {
 		localStorage.setItem("from", -1);
 	}
-	
 }
 
+function deductFoodFromCart(index) {
+	if (!check()) {
+		return;
+	}
+	var whichR = document.getElementById("name").innerHTML;
+	var buyString = whichR+ ":meal" +index;
+	if (localStorage.getItem(buyString)!=null) {
+		var quantity = localStorage.getItem(buyString);
+		var quanInt = parseInt(quantity,10);
+		quanInt -=1;
+		if (quanInt != 0) {
+			localStorage.setItem(buyString, quanInt);
+		}
+		else {
+			localStorage.removeItem(buyString);
+		}
+		alert("Izbaceno iz korpe!");
+	}
+}
+
+function addFoodToCart(index) {
+	if (!check()) {
+		return;
+	}
+	var whichR = document.getElementById("name").innerHTML;
+	var buyString= whichR+":meal"+index;
+	if (localStorage.getItem(buyString) == null) {
+		localStorage.setItem(buyString,1);
+	}
+	else {
+		var quantity = localStorage.getItem(buyString);
+		var quanInt = parseInt(quantity,10);
+		quanInt+=1;
+		localStorage.setItem(buyString, quanInt);
+	}
+	alert("Dodato u korpu!");
+}
+
+function fillCartPage() {
+	if (!check()) {
+		return;
+	}
+	var chosenArray = new Array();
+	for (i=0; i<16; i++) {
+		chosenArray[i]=JSON.parse(localStorage.getItem("restaurant"+i));
+	}
+	var mealNames = new Array();
+	var mealPrice = new Array();
+	var mealQuan = new Array();
+	var k=0;
+	for (i=0; i<16; i++) {
+		for (j=1; j<6; j++) {
+			if (localStorage.getItem(chosenArray[i].name+":meal"+j)!=null) {
+				var restaurant = chosenArray[i];
+				mealNames[k]=restaurant["meal"+j];
+				mealPrice[k]=parseInt(restaurant["meal"+j+"_price"],10);
+				mealQuan[k++]=parseInt(localStorage.getItem(restaurant.name+":meal"+j),10);
+			}
+		}
+	}
+	var fillString="";
+	for (i=0; i<mealNames.length; i++) {
+		fillString+=mealNames[i]+": <br>&nbsp;&nbsp;&nbsp;" +mealPrice[i] + " RSD x " + mealQuan[i] + " = " + mealQuan[i]*mealPrice[i] + " RSD<br>";
+	}
+	var total=0;
+	for (i=0; i<mealPrice.length; i++) {
+		total+=mealPrice[i]*mealQuan[i];
+	}
+	fillString+="----------------------------<br>"
+	fillString+="TOTAL: " + total + " RSD";
+	document.getElementById("cartFillLabel").innerHTML = fillString;
+}
+
+function remember() {
+	var i=0;
+	while (true) {
+		if (localStorage.getItem("order"+i) == null) {
+			break;
+		}
+		i++;
+	}
+	localStorage.setItem("order"+i, document.getElementById("cartFillLabel").innerHTML);
+}
+
+function checkData() {
+	var nameRegex = /^[A-Za-z]{2,30}$/;
+	var name = document.forma.ime.value;
+	if (nameRegex.test(name)!=true) {
+		alert("Uneto ime nije ispravno");
+		window.location.reload();
+		return;
+	}
+	var lastNameRegex = /^[A-Za-z]{2-50}$/;
+	var lastName = document.forma.prezime.value;
+	if (lastNameRegex.test(lastName)!=true) {
+		alert("Uneto prezime nije ispravno");
+		window.location.reload();
+		return;
+	}
+	var phoneRegex = /^(\d{9,10}|\d{3}-\d{3}-\d{4}|\(\d{3}\)\d{3}-\d{4})$/;
+	var phoneNum = document.forma.brojTelefona.value;
+	if (phoneRegex.test(phoneNum)!=true) {
+		alert("Unet neispravan broj telefona");
+		window.location.reload();
+		return;
+	}
+	var mailRegex=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+	var mail = document.forma.mail.value;
+	if (mailRegex.test(mail)!=true) {
+		alert("Uneti mail je neispravan");
+		window.location.reload();
+		return;
+	}
+	var adressRegex=/[A-Za-z]+ [0-9]*[A-Za-z]{1};
+	var adresa = document.forma.adresa.value;
+	if (adressRegex.test(adresa)!=true) {
+		alert("Uneta adresa nije dobra");
+		window.location.reload();
+		return;
+	}
+}
