@@ -1,2 +1,1 @@
-# VDProjekat
-Projekat iz VD, sesti semestar, commiti izmedju mene u RC i mene kuci
+Web-design project in Bootstrap, HTML, CSS and Javascript without the backend. Food delivery web-site with a few different windows in two languages.
